@@ -1,0 +1,115 @@
+Men who own a Pink car : db.cars.find({gender:"Male", car_color:"Pink"})
+
+Women who own a Red or a Blue Car : db.cars.find({gender:"Female", $or:[{car_color:"Red"},{car_color:"Blue"}]})
+
+Men who purchased the car in the year 1998 : db.cars.find({gender:"Male", purchase_year:"1998"})
+
+Women who purchased a Yellow car in the year 1985 : db.cars.find({gender:"Female", car_color:"Yellow", purchase_year:"1998"})
+
+Men who either have a Red or Green car and either live in Germany or Kenya : db.cars.find({$and:[{gender:"Male"},{$or:[{car_color:"Red"},{car_color:"Green"}]},{$or:[{country:"Germany"},{country:"Kenya"}]}]})
+
+People from India who purchased cars in the year 2001 : db.cars.find({country:"India", purchase_year:"2001"});
+
+People from Germany or Egypt who purchased cars in the year 1998 or 1992 : db.cars.find({$and:[{$or:[{country:"Germany"},{country:"Egypt"}]},{$or:[{purchase_year:"1992"},{purchase_year:"1998"}]}]})
+
+Women from India who own a Blue car : db.cars.find({gender:"Female",car_color:"Blue"})
+
+Men from Germany who purchased cars in 1998 and Men from Egypt who purchased cars in 1992 : db.cars.find({$or:[{$and:[{country:"Germany"},{purchase_year:"1998"}]},{$and:[{country:"Egypt"},{purchase_year:"1992"}]}]})
+
+Women who own a Green car and are not from Pakistan : db.cars.find({gender:"Female", country: {$not:/^Pakistan.*/}})
+
+
+
+All users whose gender is male : db.userData.find({gender:"Male"})
+all users whose ID is even : 
+Users who currently live in Japan : db.userData.find({native:"Japan"}) 
+Users who are female and live in India : db.userData.find({gender:"Female", native:"India"})
+Users who are more than 25 years old : db.userData.find({age:{$gt:25}})
+Users who are less than 50 years old and live in United State : db.userData.find({age:{$lt:50},native:"United States"})
+Total number of users who want to relocate to France (count only): db.userData.find({relocate_to:"France"}).count()
+Total number of users who are from USA and want to relocate to russia, sort them by age in ascending order: db.userData.find({native:"USA",relocate_to:"Russia"}).sort({age:1})
+get all users, sort them by total number of family member ASC and age DESC order : db.userData.find().sort({family_members:1, age:-1})
+
+
+
+
+Count of Men in Engineering : db.employee_salary.find({department:"Engineering"}).count()
+
+Count of Women in Engineering who earn less than one million : db.employee_salary.find({$and:[{department:"Engineering"},{gender:"Female"},{salary:{$lt:1000000}}]}).count()
+
+Count of people make less than 80k : db.employee_salary.find({salary:{$lt:80000}}).count()
+
+People who belong Accounting and Legal who make less than 100k : db.employee_salary.find({$and:[{$or:[{department:"Accounting"},{department:"Legal"}]},{salary:{$lt:100000}}]})
+
+Top 10 earning Men : db.employee_salary.find().sort(salary:-1).limit(10)
+
+Bottom 10 earning Women : db.employee_salary.find({gender:"Female"}).sort(salary:1).limit(10)
+
+Top 5 earning Engineering people : db.employee_salary.find({department:"Engineering"}).sort(salary:-1).limit(5)
+
+Bottom 5 earning Legal people : db.employee_salary.find({department:"Legal"}).sort(salary:1).limit(5)
+
+Women ranked 30 to 50 in terms of salary earned : db.employee_salary.find({gender:"Female"}).sort(salary:-1).skip(29).limit(21)
+
+Men ranked 50 to 100 in terms of salary earned : db.employee_salary.find({gender:"Male"}).sort(salary:-1).skip(49).limit(51)
+
+Bottom 50 earning women in Engineering : db.employee_salary.find({gender:"Female",department:"Engineering"}).sort(salary:1).limit(50)
+
+Top 50 earning men in Human Resources : db.employee_salary.find({gender:"Male",department:"Human Resources"}).sort(salary:-1).limit(50)
+
+
+
+
+
+
+Count of all the female students : db.students_marks.find({gender:"Female"}).count()
+
+Count of all male students who scored more that 85 in maths, science and english : db.students_marks.find({gender:"Male", maths: {$gt:85}}).count()
+
+Count of all students who scored between 50 and 75 marks in maths and english : db.students_marks.find({$and:[{maths:{$lt:75}},{maths:{$gt:50}},{english:{$lt:75}},{english:{$gt:50}}]}).count()
+
+Count of students from class I to class V who score more that 50 in all subjects : db.students_marks.find({$and:[{$or:[{class:"I"},{class:"II"},{class:"III"},{class:"IV"},{class:"V"}]},{maths:{$gt:50}},{english:{$gt:50}},{science:{$gt:50}}]}).count()
+
+Find all the female students from grade X section A who scored less that 25 in all subjects : db.students_marks.find({gender:"Female",class:"X",section:"A",$and:[{maths:{$lt:25}},{english:{$lt:25}},{science:{$lt:25}}]})
+
+Top 3 students in grade V based on maths score : db.students_marks.find({class:"V"}).sort({maths:-1}).limit(3)
+
+Bottom 5 students in grade I based on science score : db.students_marks.find({class:"I"}).sort({science:1}).limit(5)
+
+Students from section A who scored less than 50 in all the subjects : db.students_marks.find({section:"A", $and:[{maths:{$lt:50}},{science:{$lt:50}},{english:{$lt:50}}]})
+
+Students from section C who scored more that 75 in all the subjects : db.students_marks.find({section:"C", $and:[{maths:{$gt:75}},{science:{$gt:75}},{english:{$gt:75}}]})
+
+Students who will fall in page 3 if ordered by increasing order of maths scores (Assume 10 results per page) : db.students_marks.find().sort({maths:1}).skip(20).limit(10)
+
+Students who will fall in page 5 if ordered by descreasing order of science scores (Assume 20 results per page) : db.students_marks.find().sort({science:-1}).skip(80).limit(20)
+
+Female Students who will fall in page 4 if ordered by increasing order of science scores and maths scores (Assume 5 results per page) : db.students_marks.find({gender:"Female"}).sort({science:1, maths:1}).skip(15).limit(5)
+
+Male Students who will fall in page 3 if ordered by decreasing order of science, maths and english scores (Assume 15 results per page) : db.students_marks.find({gender:"Male"}).sort({science:-1, maths:-1, english:-1}).skip(30).limit(15)
+
+
+Find all the female users : db.users.find({gender:"Female"})
+
+Find all the female users who speak one of the two languages Kannada, Hindi : db.users.find({$or:[{language:"Kannada"},{language:"Hindi"}]})
+
+Find all the male users who can speak Hindi and female users who can speak Kannada : db.users.find({$or:[{gender:"Female", language:"Kannada"},{gender:"Male", language:"Hindi"}]})
+
+Find all the users who wear the shirt size S : db.users.find({shirt_size: 'S'})
+
+Find all the female users who wear the shirt size XL : db.users.find({gender:'Female', shirt_size: 'XL'})
+
+Find all the English speaking male users and Hindi speaking female users : db.users.find({$or:[{gender:"Female", language:"Hindi"},{gender:"Male", language:"English"}]})
+
+Find all the male users who can speak Hindi or English and female users who can speak Kannada or German : db.users.find({$or:[{gender:"Male", $or:[{language:"Hindi"},{language:"English"}]},{gender:"Female", $or:[{language:"German"},{language:"Kannada"}]}]})
+
+Find all the female users who can speak Bengali who wear shirt size XL and male users who speak German and wear shirt size either L or M : db.users.find({$or:[{gender:"Female",language:"Bengali",shirt_size:"XL"},{gender:"Male",language:"German", $or:[{shirt_size:"M"},{shirt_size:"L"}]}]})
+
+Find all the female users who speak any of the Indian languages (Hindi, Punjabi, Bengali, Gujarati, Tamil, Malayalam) : db.users.find({gender:"Female", $or:[{language:"Hindi"},{language:"Punjabi"},{language:"Bengali"},{language:"Gujarati"},{language:"Tamil"},{language:"Malayalam"}]})
+
+Men who can speak Korean : db.user.find({gender:"Male",language:"Korean"})
+
+
+
+
+
